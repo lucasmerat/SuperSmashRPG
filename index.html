@@ -10,10 +10,7 @@
     <link rel="stylesheet" type="text/css" media="screen" href="assets/css/reset.css" />
     <link rel="stylesheet" type="text/css" media="screen" href="assets/css/style.css" />
     
-    <script
-  src="https://code.jquery.com/jquery-3.3.1.js"
-  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
-  crossorigin="anonymous"></script> 
+    <script src="assets/javascript/jquery-3.3.1.min.js"></script> 
   
 </head>
 <body>
@@ -23,25 +20,25 @@
     <div class = "col-4"id="stats">
         <div id="choose-area">
             <h2>Choose a character</h2>
-            <div id="mario">
-                <p class="char-name">Mario</p>
+            <div id="mario" class="char-class">
+                <p class="char-name"  class="char-class">Mario</p>
                 <img class="char-img" src="assets/images/mario.png">
-                <p id="mario-health">HP:140</p>
+                <p id="mario-health" class="char-health">140</p>
             </div>
-            <div id="marth">
+            <div id="marth" class="char-class">
                 <p class="char-name">Marth</p>
                 <img class="char-img" src="assets/images/marth.png">
-                <p id="marth-health">HP:95</p>
+                <p id="marth-health" class="char-health">HP:95</p>
             </div>
-            <div id="pokemon">
+            <div id="pokemon" class="char-class">
                 <p class="char-name">Pokemon Trainer</p>
                 <img class="char-img" src="assets/images/pokemon.png">
-                <p id="pokemon-health">HP:110</p>
+                <p id="pokemon-health" class="char-health">HP:110</p>
             </div>
-            <div id="isabelle">
+            <div id="isabelle" class="char-class">
                 <p class="char-name">Isabelle</p>
                 <img class="char-img" src="assets/images/isabelle.png">
-                <p id="isabelle-health">HP:180</p>
+                <p id="isabelle-health" class="char-health">HP:180</p>
             </div>
         </div>      
         <div id="enemy-choose-area">
@@ -55,10 +52,12 @@
                 </div>
                 <div class="mb-3" id="your-character-area">
                     <h2>Your Character</h2>
-                    <button>Attack</button>
+
                 </div>
                 <div id="defender-area">
                     <h2>Defender</h2>
+                    <button class="attack-btn">Attack</button>
+
                     <p id="game-details">Details about battle added here</p>
             </div>
     </div> 
