@@ -52,16 +52,16 @@ $(document).ready(function() {
     //Removes click for the enemy and hero
     $(".enemy").off("click");
     $(".hero").off("click");
-    //Adds Hero and enemies to their appropriate divs
-    $("#your-character-area").append(this);
-    $(".attack-btn").click(function(){
+    //Adds Hero and enemies to their appropriate divs, with effects
+    $("#your-character-area").append(this).show('slow');
+    $(".attack-btn").click(function noEnemy(){
         $("#game-details").html('Choose an enemy to fight before attacking')
     });
-    $("#enemy-choose-area").append(others);
+    $("#enemy-choose-area").append(others).show('slow');
     //Click listener that selects a defender
     $(".enemy").click(function() {
       $(this).addClass("defender"); //Adds defender css class
-      $("#defender-area").append($(".defender")); //Appends defender to appropriate div
+      $("#active-defender-area").append($(".defender")).show('slow'); //Appends defender to appropriate div
       $(".enemy").off("click"); //Removes event listener from enemy div
       var heroAttackMult = $(".hero").attr("attack"); //Declares an attack variable outside scope of attack section to increase hero attack each round
       //Click listener on attack button - this is the main functionality of the battleground
@@ -100,22 +100,14 @@ $(document).ready(function() {
         );
         console.log($(".defender").attr("health"));
 
-        if ($(".hero").attr("health") < 0) {
-          $("#game-details").html("Health reduced below 0, you lose!");
-          $(".attack-btn").off("click");
-          $(".enemy").off("click");
-          $(".restart").css("visibility", "visible");
-          $('.restart').click(function() {
-            location.reload();
-          }); 
-        }
-        if ($(".defender").attr("health") <= 0) {
+        
+        if ($(".defender").attr("health") <= 0 && $('.hero').attr('health') >= 0) {
           $("#game-details").html(
             "You have defeated " +
               defenderName +
               " choose a new enemy to fight."
           );
-          $(".defender").css("display", "none");
+          $(".defender").hide('fast');
           defenderKillCount++;
           console.log(defenderKillCount);
           $(".attack-btn").off("click"); //Turns off click listener on attack button until another enemy is chosen
@@ -126,6 +118,15 @@ $(document).ready(function() {
             $(".enemy").off("click"); //Removes event listener from enemy div
           });
         }
+        if ($(".hero").attr("health") <= 0) {
+            $("#game-details").html("Health reduced below 0, you lose!");
+            $(".attack-btn").off("click");
+            $(".enemy").off("click");
+            $(".restart").css("visibility", "visible");
+            $('.restart').click(function() {
+              location.reload();
+            }); 
+          }
        if (defenderKillCount === 3){
          $('#game-details').html('You have defeated all defenders - you win!');
         }

@@ -23,7 +23,7 @@ p {
     font-family: 'B612 Mono', monospace;
 }
 
-h2 {
+h2, h3, h4, h5 {
     font-family: 'Anton', sans-serif;
 }
 
@@ -62,6 +62,10 @@ h2 {
     text-align:center;
     font-size:11px;
     font-weight:bold;
+}
+
+#enemy-choose-area, #active-defender-area, #your-character-area {
+    display:none;
 }
 
 .enemy {
