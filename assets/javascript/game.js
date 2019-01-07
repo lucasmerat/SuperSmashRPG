@@ -31,6 +31,8 @@ $(document).ready(function() {
   $("#pokemon").attr("attack", 12);
   $("#pokemon").attr("name", "Pokemon Trainer");
 
+  var defenderKillCount = 0; //Set kill count to allow win-game logic when all enemies are defeated
+
   //Showing health levels on screen
   $("#mario-health").html($("#mario").attr("health"));
   $("#isabelle-health").html($("#isabelle").attr("health"));
@@ -52,6 +54,9 @@ $(document).ready(function() {
     $(".hero").off("click");
     //Adds Hero and enemies to their appropriate divs
     $("#your-character-area").append(this);
+    $(".attack-btn").click(function(){
+        $("#game-details").html('Choose an enemy to fight before attacking')
+    });
     $("#enemy-choose-area").append(others);
     //Click listener that selects a defender
     $(".enemy").click(function() {
@@ -104,7 +109,6 @@ $(document).ready(function() {
             location.reload();
           }); 
         }
-
         if ($(".defender").attr("health") <= 0) {
           $("#game-details").html(
             "You have defeated " +
@@ -112,6 +116,8 @@ $(document).ready(function() {
               " choose a new enemy to fight."
           );
           $(".defender").css("display", "none");
+          defenderKillCount++;
+          console.log(defenderKillCount);
           $(".attack-btn").off("click"); //Turns off click listener on attack button until another enemy is chosen
           $(".enemy").click(function() {
             $(".attack-btn").click(attackButton); //Calls the attackButton function code to restart fight sequence
@@ -120,6 +126,10 @@ $(document).ready(function() {
             $(".enemy").off("click"); //Removes event listener from enemy div
           });
         }
+       if (defenderKillCount === 3){
+         $('#game-details').html('You have defeated all defenders - you win!');
+        }
+
       });
     });
   });
