@@ -74,37 +74,44 @@ $(document).ready(function() {
       $(".attack-btn").click(function attackButton() {
         //Declaring varibales to set name, health and attack attributes for defender and hero
         var defenderName = $(".defender").attr("name");
-        console.log(defenderHealth);
         var defenderHealth = $(".defender").attr("health");
-        console.log(defenderHealth);
         var defenderAttack = $(".defender").attr("attack");
         var heroName = $(".hero").attr("name");
         var heroHealth = $(".hero").attr("health");
         var heroAttack = $(".hero").attr("attack");
-        $(".defender").attr("health", defenderHealth - heroAttack); //Reduces defenders health by ammt of hero attack
+        $(".defender").attr("health", $(".defender").attr("health") - $(".hero").attr("attack")); //Reduces defenders health by ammt of hero attack
         $(".defender > .char-health").html($(".defender").attr("health")); //Changes the defender's health on screen
-        //Can i make what is below conditional so that on the last attack before defender dies, I dont get hit?
-        $(".hero").attr("health", heroHealth - defenderAttack); //Reduces hero's health by ammt of defender's attack
-        $(".hero > .char-health").html($(".hero").attr("health")); //Changes hero's health on screen
+        console.log('Hero attacked defender for ' + $(".hero").attr("attack"));
+        console.log('defender health is now ' + $(".defender").attr("health"));
+        console.log('hero attack increased by ' + heroAttackMult);
+        //Only decrease the health of the hero if the hero's attack is not less than the defender's health -- explain?
+        if(!$(".hero").attr("attack") <= $(".defender").attr("health")){
+            $(".hero").attr("health", $(".hero").attr("health") - $(".defender").attr("attack")); //Reduces hero's health by ammt of defender's attack
+            $(".hero > .char-health").html($(".hero").attr("health")); //Changes hero's health on screen
+        } else{
+            console.log('hero attack is ' + $(".hero").attr("attack"));
+            console.log('defender health is' + $(".defender").attr("health"));
+            console.log('Heros attack was greater than the defenders health');
+        }
         //Display details about each move in detail box
         $("#game-details").html(
           "You attacked " +
             defenderName +
             " for " +
-            heroAttack +
+            $(".hero").attr("attack") +
             " damage" +
             "<br>" +
             defenderName +
             " attacked you back for " +
-            defenderAttack +
+            $(".defender").attr("attack") +
             "."
         );
         //Increases the power of the hero's attack each move, by the value of heroAttackMult variable declared outside scope of this function
         $(".hero").attr(
           "attack",
-          parseInt(heroAttack) + parseInt(heroAttackMult)
+          parseInt($(".hero").attr("attack")) + parseInt(heroAttackMult)
         );
-        console.log($(".defender").attr("health"));
+            console.log('hero attack is now' + $(".hero").attr("attack"));
 
         if (
           $(".defender").attr("health") <= 0 &&
@@ -115,7 +122,6 @@ $(document).ready(function() {
               defenderName +
               " choose a new enemy to fight."
           );
-          console.log($(".hero").attr("health"))
           $(".defender").hide("fast");
           defenderKillCount++;
           console.log(defenderKillCount);
