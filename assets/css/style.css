@@ -107,4 +107,9 @@ h2, h3, h4, h5 {
     visibility: hidden;
     margin: 0 auto;
     display:block;
+    background-color: #e8e9eb;
+    border-radius: 6px;
+    font-weight: bold;
+    color: #2d333e;
+    font-style: italic;
 }
