@@ -97,8 +97,10 @@ h2, h3, h4, h5 {
     background-color:#ff4f4f;
 }
 
-.attack-btn {
+.attack-btn, .shield-btn {
     margin:0px 0px 12px 0px;
+    height:30px;
+    width:160px;
 }
 
 .restart {

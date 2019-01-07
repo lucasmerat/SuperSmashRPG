@@ -74,11 +74,7 @@ $(document).ready(function() {
       $(".attack-btn").click(function attackButton() {
         //Declaring varibales to set name, health and attack attributes for defender and hero
         var defenderName = $(".defender").attr("name");
-        var defenderHealth = $(".defender").attr("health");
-        var defenderAttack = $(".defender").attr("attack");
         var heroName = $(".hero").attr("name");
-        var heroHealth = $(".hero").attr("health");
-        var heroAttack = $(".hero").attr("attack");
         $(".defender").attr("health", $(".defender").attr("health") - $(".hero").attr("attack")); //Reduces defenders health by ammt of hero attack
         $(".defender > .char-health").html($(".defender").attr("health")); //Changes the defender's health on screen
         console.log('Hero attacked defender for ' + $(".hero").attr("attack"));
@@ -137,9 +133,12 @@ $(document).ready(function() {
             $("#game-details").html("You have defeated all defenders - you win!");
           }
         if ($(".hero").attr("health") <= 0) {
-          $("#game-details").html("Health reduced to 0 or below - you lose!");
+          
+          $("#game-details").html("Health reduced to 0 - you lose!");
           $(".attack-btn").off("click");
           $(".enemy").off("click");
+          $(".hero").attr("health", 0);
+          $(".hero > .char-health").html($(".hero").attr("health"));
           $(".restart").css("visibility", "visible");
           $(".restart").click(function() {
             location.reload();
