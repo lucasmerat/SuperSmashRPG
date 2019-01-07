@@ -19,16 +19,20 @@
 $(document).ready(function() {
   //Declaring attributes for health, attack and name of each character
   $("#mario").attr("health", 140);
-  $("#mario").attr("attack", 15);
+  $("#mario").attr("attack", 5);
+  $("#mario").attr("shield", 15);
   $("#mario").attr("name", "Mario");
   $("#marth").attr("health", 95);
   $("#marth").attr("attack", 8);
+  $("#marth").attr("shield", 15);
   $("#marth").attr("name", "Marth");
   $("#isabelle").attr("health", 180);
   $("#isabelle").attr("attack", 28);
+  $("#isabelle").attr("shield", 15);
   $("#isabelle").attr("name", "Isabelle");
   $("#pokemon").attr("health", 110);
   $("#pokemon").attr("attack", 12);
+  $("#pokemon").attr("shield", 15);
   $("#pokemon").attr("name", "Pokemon Trainer");
 
   var defenderKillCount = 0; //Set kill count to allow win-game logic when all enemies are defeated
@@ -47,47 +51,52 @@ $(document).ready(function() {
     console.log(this);
     $(this).css("display", "block"); //Centers the hero in its div
     var others = $(".char-class").not(".hero"); //Defines a variable w all characters that are not the hero
-    console.log(others);
     others.attr("faction", "enemy").addClass("enemy"); //Adds an enemy faction attribute (needed?) and class to each of the enemies
-    //Removes click for the enemy and hero
+    //Removes click for the enemy and hero after selected so you cannot choose more
     $(".enemy").off("click");
     $(".hero").off("click");
-    //Adds Hero and enemies to their appropriate divs, with effects
+    //Adds Hero to their appropriate divs, with effects
     $("#your-character-area")
       .append(this)
       .slideDown("slow");
+    //Makes it known to the user that there is no enemy in the battleground if they try and attack to early
     $(".attack-btn").click(function noEnemy() {
       $("#game-details").html("Choose an enemy to fight before attacking");
     });
+    //Adds enemies to their divs, with effect
     $("#enemy-choose-area")
       .append(others)
       .show("slow");
-    //Click listener that selects a defender
+    //Click listener that selects a defender and moves them to their div
     $(".enemy").click(function() {
       $(this).addClass("defender"); //Adds defender css class
       $("#active-defender-area")
         .append($(".defender"))
-        .slideDown("slow"); //Appends defender to appropriate div
+        .slideDown("slow");
       $(".enemy").off("click"); //Removes event listener from enemy div
       var heroAttackMult = $(".hero").attr("attack"); //Declares an attack variable outside scope of attack section to increase hero attack each round
+      //Declaring varibales to set name of defender and heroes
+      var defenderName = $(".defender").attr("name");
+      var heroName = $(".hero").attr("name");
       //Click listener on attack button - this is the main functionality of the battleground
       $(".attack-btn").click(function attackButton() {
-        //Declaring varibales to set name, health and attack attributes for defender and hero
-        var defenderName = $(".defender").attr("name");
-        var heroName = $(".hero").attr("name");
-        $(".defender").attr("health", $(".defender").attr("health") - $(".hero").attr("attack")); //Reduces defenders health by ammt of hero attack
+        $(".defender").attr(
+          "health",
+          $(".defender").attr("health") - $(".hero").attr("attack")
+        ); //Reduces defenders health by ammt of hero attack
         $(".defender > .char-health").html($(".defender").attr("health")); //Changes the defender's health on screen
-        console.log('Hero attacked defender for ' + $(".hero").attr("attack"));
-        console.log('defender health is now ' + $(".defender").attr("health"));
-        console.log('hero attack increased by ' + heroAttackMult);
         //Only decrease the health of the hero if the hero's attack is not less than the defender's health -- explain?
-        if(!$(".hero").attr("attack") <= $(".defender").attr("health")){
-            $(".hero").attr("health", $(".hero").attr("health") - $(".defender").attr("attack")); //Reduces hero's health by ammt of defender's attack
-            $(".hero > .char-health").html($(".hero").attr("health")); //Changes hero's health on screen
-        } else{
-            console.log('hero attack is ' + $(".hero").attr("attack"));
-            console.log('defender health is' + $(".defender").attr("health"));
-            console.log('Heros attack was greater than the defenders health');
+        if (!$(".hero").attr("attack") <= $(".defender").attr("health")) {
+          $(".hero").attr(
+            "health",
+            $(".hero").attr("health") - $(".defender").attr("attack")
+          ); //Reduces hero's health by ammt of defender's attack
+          $(".hero > .char-health").html($(".hero").attr("health")); //Changes hero's health on screen
+        } else {
+          //to check when something went wrong
+          console.log("hero attack is " + $(".hero").attr("attack"));
+          console.log("defender health is" + $(".defender").attr("health"));
+          console.log("Heros attack was greater than the defenders health");
         }
         //Display details about each move in detail box
         $("#game-details").html(
@@ -107,7 +116,7 @@ $(document).ready(function() {
           "attack",
           parseInt($(".hero").attr("attack")) + parseInt(heroAttackMult)
         );
-            console.log('hero attack is now' + $(".hero").attr("attack"));
+        console.log("hero attack is now" + $(".hero").attr("attack"));
 
         if (
           $(".defender").attr("health") <= 0 &&
@@ -130,10 +139,10 @@ $(document).ready(function() {
           });
         }
         if (defenderKillCount === 3) {
-            $("#game-details").html("You have defeated all defenders - you win!");
-          }
+          $("#game-details").html("You have defeated all defenders - you win!");
+        }
+        //Lost game logic
         if ($(".hero").attr("health") <= 0) {
-          
           $("#game-details").html("Health reduced to 0 - you lose!");
           $(".attack-btn").off("click");
           $(".enemy").off("click");
@@ -143,6 +152,28 @@ $(document).ready(function() {
           $(".restart").click(function() {
             location.reload();
           });
+        }
+      });
+      $(".shield-btn").click(function() {
+        if ($(".hero").attr("shield") > 0) {
+          $(".hero").attr(
+            "health",
+            parseInt($(".hero").attr("health")) +
+              parseInt($(".hero").attr("shield"))
+          );
+          $(".hero").attr("shield", parseInt($(".hero").attr("shield")) - 5);
+          $(".hero > .char-health").html($(".hero").attr("health")); //Changes the defender's health on screen
+          $("#game-details").html(
+            "You used shield, your health is now " +
+              $(".hero").attr("health") +
+              ". You have " +
+              $(".hero").attr("shield") +
+              " shield left."
+          );
+          console.log($(".hero").attr("health"));
+          console.log($(".hero").attr("shield"));
+        } else {
+          $("#game-details").html("You have no shield left - you must attack");
         }
       });
     });
