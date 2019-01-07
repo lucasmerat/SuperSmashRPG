@@ -17,18 +17,18 @@
 //Remember! You can give an image an attribute that it carries - can be a number or value later accessed
 
 $(document).ready(function() {
-  //Declaring attributes for health and attack of each character
+  //Declaring attributes for health, attack and name of each character
   $("#mario").attr("health", 140);
-  $("#mario").attr("attack", 20);
+  $("#mario").attr("attack", 15);
   $("#mario").attr("name", "Mario");
   $("#marth").attr("health", 95);
-  $("#marth").attr("attack", 10);
+  $("#marth").attr("attack", 8);
   $("#marth").attr("name", "Marth");
   $("#isabelle").attr("health", 180);
-  $("#isabelle").attr("attack", 35);
+  $("#isabelle").attr("attack", 28);
   $("#isabelle").attr("name", "Isabelle");
   $("#pokemon").attr("health", 110);
-  $("#pokemon").attr("attack", 18);
+  $("#pokemon").attr("attack", 12);
   $("#pokemon").attr("name", "Pokemon Trainer");
 
   //Showing health levels on screen
@@ -60,7 +60,7 @@ $(document).ready(function() {
       $(".enemy").off("click"); //Removes event listener from enemy div
       var heroAttackMult = $(".hero").attr("attack"); //Declares an attack variable outside scope of attack section to increase hero attack each round
       //Click listener on attack button - this is the main functionality of the battleground
-      $(".attack-btn").click(function() {
+      $(".attack-btn").click(function attackButton() {
         //Declaring varibales to set name, health and attack attributes for defender and hero
         var defenderName = $(".defender").attr("name");
         console.log(defenderHealth);
@@ -70,12 +70,9 @@ $(document).ready(function() {
         var heroName = $(".hero").attr("name");
         var heroHealth = $(".hero").attr("health");
         var heroAttack = $(".hero").attr("attack");
-        console.log(defenderHealth);
         $(".defender").attr("health", defenderHealth - heroAttack); //Reduces defenders health by ammt of hero attack
-        console.log(defenderHealth);
         $(".defender > .char-health").html($(".defender").attr("health")); //Changes the defender's health on screen
-        console.log(defenderHealth);
-        console.log($(".defender > .char-health"));
+        //Can i make what is below conditional so that on the last attack before defender dies, I dont get hit?
         $(".hero").attr("health", heroHealth - defenderAttack); //Reduces hero's health by ammt of defender's attack
         $(".hero > .char-health").html($(".hero").attr("health")); //Changes hero's health on screen
         //Display details about each move in detail box
@@ -96,21 +93,33 @@ $(document).ready(function() {
           "attack",
           parseInt(heroAttack) + parseInt(heroAttackMult)
         );
-        console.log(defenderHealth);
+        console.log($(".defender").attr("health"));
 
-    if(heroHealth <= 0) {
-        $('#game-details').html('Health reduced below 0, you lose!');
-    }
+        if ($(".hero").attr("health") < 0) {
+          $("#game-details").html("Health reduced below 0, you lose!");
+          $(".attack-btn").off("click");
+          $(".enemy").off("click");
+          $(".restart").css("visibility", "visible");
+          $('.restart').click(function() {
+            location.reload();
+          }); 
+        }
 
-    if(defenderHealth <= 0){
-        $('#game-details').html('You have defeated ' + defenderName + ' choose a new enemy to fight.');
-        $('.defender').css('display', 'none');
-        $(".enemy").click(function() {
+        if ($(".defender").attr("health") <= 0) {
+          $("#game-details").html(
+            "You have defeated " +
+              defenderName +
+              " choose a new enemy to fight."
+          );
+          $(".defender").css("display", "none");
+          $(".attack-btn").off("click"); //Turns off click listener on attack button until another enemy is chosen
+          $(".enemy").click(function() {
+            $(".attack-btn").click(attackButton); //Calls the attackButton function code to restart fight sequence
             $(this).addClass("defender"); //Adds defender css class
             $("#defender-area").append($(".defender")); //Appends defender to appropriate div
             $(".enemy").off("click"); //Removes event listener from enemy div
-        });
-    }
+          });
+        }
       });
     });
   });

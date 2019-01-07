@@ -62,17 +62,23 @@ h2 {
 }
 
 .enemy {
-    background-color: red;
+    background-color: #ff4f4f;
     margin:10px;
     width:120px;
 }
 
 .hero {
-    background-color: blue;
+    background-color: #4747ff;
     margin: 0 auto;
     width:120px;
 }
 
 .defender {
-    background-color:red;
+    background-color:#ff4f4f;
+}
+
+.restart {
+    visibility: hidden;
+    margin: 0 auto;
+    display:block;
 }
