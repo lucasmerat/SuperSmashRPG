@@ -27,7 +27,7 @@ $(document).ready(function() {
   $("#marth").attr("shield", 15);
   $("#marth").attr("name", "Marth");
   $("#isabelle").attr("health", 180);
-  $("#isabelle").attr("attack", 28);
+  $("#isabelle").attr("attack", 19);
   $("#isabelle").attr("shield", 15);
   $("#isabelle").attr("name", "Isabelle");
   $("#pokemon").attr("health", 110);
@@ -86,6 +86,9 @@ $(document).ready(function() {
         ); //Reduces defenders health by ammt of hero attack
         $(".defender > .char-health").html($(".defender").attr("health")); //Changes the defender's health on screen
         //Only decrease the health of the hero if the hero's attack is not less than the defender's health -- explain?
+        console.log($(".hero").attr("attack"));
+        console.log($(".defender").attr("health"));
+        console.log(!$(".hero").attr("attack") < $(".defender").attr("health"));
         if (!$(".hero").attr("attack") <= $(".defender").attr("health")) {
           $(".hero").attr(
             "health",
@@ -161,17 +164,26 @@ $(document).ready(function() {
             parseInt($(".hero").attr("health")) +
               parseInt($(".hero").attr("shield"))
           );
+          shieldDisplay = $(".hero").attr("shield");
           $(".hero").attr("shield", parseInt($(".hero").attr("shield")) - 5);
-          $(".hero > .char-health").html($(".hero").attr("health")); //Changes the defender's health on screen
-          $("#game-details").html(
-            "You used shield, your health is now " +
-              $(".hero").attr("health") +
-              ". You have " +
-              $(".hero").attr("shield") +
-              " shield left."
+          //Changes the defender's health on screen
+          $(".hero").attr(
+            "health",
+            $(".hero").attr("health") - $(".defender").attr("attack")
           );
-          console.log($(".hero").attr("health"));
-          console.log($(".hero").attr("shield"));
+          $(".hero > .char-health").html($(".hero").attr("health"));
+          $("#game-details").html(
+            "You used shield and blocked " +
+              shieldDisplay +
+              " damage. " +
+              defenderName +
+              " hit you for " +
+              $(".defender").attr("attack") +
+              " damage. You now have " +
+              $(".hero").attr("health") +
+              " health left. Your shield decreased to " +
+              $(".hero").attr("shield")
+          );
         } else {
           $("#game-details").html("You have no shield left - you must attack");
         }
