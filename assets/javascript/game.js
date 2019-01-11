@@ -73,6 +73,7 @@ $(document).ready(function() {
         .slideDown("slow");
       $(".enemy").off("click");
       //Declaring varibales to set name health attack and shield of defender and hero
+
       var heroAttackMult = $(".hero").attr("attack"); //Declares an attack variable outside scope of attack section to increase hero attack each round
       var defenderName = $(".defender").attr("name");
       var heroName = $(".hero").attr("name");
@@ -80,6 +81,7 @@ $(document).ready(function() {
       var heroAttack = $(".hero").attr("attack");
       var defenderAttack = $(".defender").attr("attack");
       var defenderHealth = $(".defender").attr("health");
+      
       //Click listener on attack button - this is the main functionality of the battleground
       $(".attack-btn").click(function attackButton() {
         console.log("defender health started at" + defenderHealth);
@@ -127,7 +129,7 @@ $(document).ready(function() {
           console.log(defenderKillCount);
           $(".attack-btn").off("click");
           $(".enemy").click(function() {
-            $(".attack-btn").click(attackButton); //Calls the attackButton function code to restart fight sequence
+            $(".attack-btn").click(attackButton()); //Calls the attackButton function code to restart fight sequence
             $(this).addClass("defender"); //Adds defender css class
             //Reset defender health name and attack after kill
             defenderHealth = $(".defender").attr("health");
