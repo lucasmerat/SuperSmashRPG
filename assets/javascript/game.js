@@ -44,6 +44,9 @@ $(document).ready(function() {
   //Adding hero class when initial click is made to select a character
   $(".char-class").click(function() {
     $(this).addClass("hero");
+    console.log($(".hero").attr("shield"));
+    var heroShield = $(".hero").attr("shield");
+    console.log(heroShield);
     $(this).css("display", "block"); //To center hero in its div
     var others = $(".char-class").not(".hero");
     others.addClass("enemy");
@@ -69,7 +72,7 @@ $(document).ready(function() {
         .append($(".defender"))
         .slideDown("slow");
       $(".enemy").off("click");
-      //Declaring varibales to set name health and attack of defender and heroes
+      //Declaring varibales to set name health attack and shield of defender and hero
       var heroAttackMult = $(".hero").attr("attack"); //Declares an attack variable outside scope of attack section to increase hero attack each round
       var defenderName = $(".defender").attr("name");
       var heroName = $(".hero").attr("name");
@@ -93,7 +96,9 @@ $(document).ready(function() {
           //to check when something went wrong
           console.log("hero attack is " + heroAttack);
           console.log("defender health is" + defenderHealth);
-          console.log("Heros attack was greater than the defenders health, defender did not hit hero");
+          console.log(
+            "Heros attack was greater than the defenders health, defender did not hit hero"
+          );
         }
         //Display details about each move in detail box
         $("#game-details").html(
@@ -120,63 +125,69 @@ $(document).ready(function() {
           $(".defender").hide("fast");
           defenderKillCount++;
           console.log(defenderKillCount);
-          $(".attack-btn").off("click"); 
+          $(".attack-btn").off("click");
           $(".enemy").click(function() {
             $(".attack-btn").click(attackButton); //Calls the attackButton function code to restart fight sequence
             $(this).addClass("defender"); //Adds defender css class
-            defenderHealth = $('.defender').attr('health'); //Reset defender health after kill
-            defenderAttack = $('.defender').attr('attack'); //Reset defender health after kill
-            defenderName = $('.defender').attr('name'); //Reset defender health after kill
-            $("#defender-area").append($(".defender")); 
-            $(".enemy").off("click"); 
+            //Reset defender health name and attack after kill
+            defenderHealth = $(".defender").attr("health");
+            defenderAttack = $(".defender").attr("attack");
+            defenderName = $(".defender").attr("name");
+            $("#defender-area").append($(".defender"));
+            $(".enemy").off("click");
           });
         }
         if (defenderKillCount === 3) {
           $("#game-details").html("You have defeated all defenders - you win!");
+          $(".attack-btn").off("click");
+          $(".shield-btn").off("click");
         }
         if (heroHealth <= 0) {
           healthLost();
         }
       });
+      //Shield button mechanics.
       $(".shield-btn").click(function() {
-        if ($(".hero").attr("shield") > 0) {
-          defenderAttack = $('.defender').attr('attack');
-          defenderName = $('.defender').attr('name');
-          heroHealth = heroHealth + parseInt($(".hero").attr("shield"));
-          shieldDisplay = $(".hero").attr("shield");
-          console.log("shield was " + $(".hero").attr("shield"));
-          $(".hero").attr("shield", parseInt($(".hero").attr("shield")) - 5);
-          console.log("Now shield is " + $(".hero").attr("shield"));
-          //Changes the defender's health on screen
+        if (heroShield > 0) {
+          //Reset defender variables for new enemy chosen
+          defenderAttack = $(".defender").attr("attack");
+          defenderName = $(".defender").attr("name");
+          //Add shield to health, decrease power of shield and reduce health of hero by attack of defender
+          heroHealth = parseInt(heroHealth) + parseInt(heroShield);
+          shieldDisplay = heroShield; //To display ammt of shield used before changed in next line
+          heroShield = parseInt(heroShield) - 5;
           heroHealth = heroHealth - defenderAttack;
+          //Changes hero health on screen
           $(".hero > .char-health").html(heroHealth);
+          //Displays move details to details box
           $("#game-details").html(
             "You used shield and blocked " +
               shieldDisplay +
               " damage. " +
               defenderName +
               " hit you for " +
-              $(".defender").attr("attack") +
+              defenderAttack +
               " damage. You now have " +
               heroHealth +
               " health left. Your shield decreased to " +
-              $(".hero").attr("shield")
+              heroShield
           );
         } else {
+          //If no shield, displays message
           $("#game-details").html("You have no shield left - you must attack");
         }
         //Lose game if you die while clicking shield
         if (heroHealth <= 0) {
           healthLost();
         }
-      }); 
-      //Lost game logic add more functions here?
+      });
+      //Lost game logic
       function healthLost() {
         $("#game-details").html("Health reduced to 0 - you lose!");
         $(".attack-btn").off("click");
         $(".enemy").off("click");
-        $(".hero").attr("health", 0);
-        $(".hero > .char-health").html($(".hero").attr("health"));
+        heroHealth = 0;
+        $(".hero > .char-health").html(heroHealth);
         $(".restart").css("visibility", "visible");
         $(".restart").click(function() {
           location.reload();
